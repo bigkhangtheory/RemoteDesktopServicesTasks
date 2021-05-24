@@ -1,0 +1,61 @@
+# =============================================================================
+stages:
+  - build
+#  - test 
+#  - staging
+#  - deploy
+
+# =============================================================================
+# GLOBAL SETTINGS
+# =============================================================================
+variables:
+  GIT_STRATEGY: fetch
+  GIT_DEPTH: 10
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME
+  CI_ENVIRONMENT: Prod
+  NugetFeed: MapPSGallery
+  NugetApiKey: GxLd2ectjnjfyJ0tu9xe
+  NugetApiUrl: "https://repo.windows.mapcom.local/nuget/powershell/"
+
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  untracked: true
+  paths:
+    - BuildOutput/Modules
+  policy: pull-push
+
+# -----------------------------------------------------------------------------
+# STAGE: BUILD
+# -----------------------------------------------------------------------------
+build:depends:
+  stage: build
+  script:
+    - .\Build.ps1 -ResolveDependency
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+      - PSDepend.*.psd1
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+  artifacts:
+    reports:
+      junit: ["BuildOutput/Pester/IntegrationTestResults.xml"]
+
+build:nodepends:
+  stage: build
+  script:
+    - .\Build.ps1
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+  artifacts:
+    reports:
+      junit: ["BuildOutput/Pester/IntegrationTestResults.xml"]
+  only:
+    - master
+  except:
+    refs:
+      - main
+    changes:
+      - PSDepend.*.psd1
