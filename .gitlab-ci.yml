@@ -31,21 +31,6 @@ build:depends:
   stage: build
   script:
     - .\Build.ps1 -ResolveDependency
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      changes:
-      - PSDepend.*.psd1
-  cache:
-    # inherit all global cache settings
-    <<: *global_cache
-  artifacts:
-    reports:
-      junit: ["BuildOutput/Pester/IntegrationTestResults.xml"]
-
-build:nodepends:
-  stage: build
-  script:
-    - .\Build.ps1
   cache:
     # inherit all global cache settings
     <<: *global_cache
@@ -54,8 +39,3 @@ build:nodepends:
       junit: ["BuildOutput/Pester/IntegrationTestResults.xml"]
   only:
     - master
-  except:
-    refs:
-      - main
-    changes:
-      - PSDepend.*.psd1

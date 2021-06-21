@@ -1,6 +1,8 @@
-if ($env:BHBranchName -eq 'master' -and $env:NugetApiKey) {
+if ($env:BHBranchName -eq 'master' -and $env:NugetApiKey)
+{
     
-    if ($env:BHBuildSystem -eq 'AppVeyor') {
+    if ($env:BHBuildSystem -eq 'AppVeyor')
+    {
         Deploy Module {
             By PSGalleryModule {
                 FromSource "$($env:BHBuildOutput)\Modules\$($env:BHProjectName)"
@@ -11,7 +13,9 @@ if ($env:BHBranchName -eq 'master' -and $env:NugetApiKey) {
                 }
             }
         }
-    } elseif ($env:BHBuildSystem -eq 'Azure Pipelines') {
+    }
+    elseif ($env:BHBuildSystem -eq 'Azure Pipelines')
+    {
         Deploy Module {
             By PSGalleryModule {
                 FromSource "$($env:AGENT_RELEASEDIRECTORY)\$($env:RELEASE_PRIMARYARTIFACTSOURCEALIAS)\SourcesDirectory\BuildOutput\Modules\$($env:BUILD_REPOSITORY_NAME)"
@@ -22,7 +26,9 @@ if ($env:BHBranchName -eq 'master' -and $env:NugetApiKey) {
                 }
             }
         }
-    } elseif ($env:CI) {
+    }
+    elseif ($env:CI)
+    {
         "`t* You are in a known build system (Current: $env:BHBuildSystem)`n" +
         "`t* You are committing to the master branch (Current: $env:BHBranchName) `n" +
         "`t* The NugetApiKey is known (value as bool is '$([bool]$env:NugetApiKey)') `n" +
@@ -35,13 +41,14 @@ if ($env:BHBranchName -eq 'master' -and $env:NugetApiKey) {
                 To $env:NugetFeed
                 WithOptions @{
                     ApiKey = $env:NugetApiKey
-                    Force  = $true
                 }
             }
         }
     }
 
-} else {
+}
+else
+{
     #"Skipping deployment: To deploy, ensure that...`n" +
     "`t* You are in a known build system (Current: $env:BHBuildSystem)`n" +
     "`t* You are committing to the master branch (Current: $env:BHBranchName) `n" +
