@@ -13,7 +13,7 @@ Param (
     $Repository = 'PSGallery',
 
     [uri]
-    $RepositoryProxy = 'https://repo.windows.mapcom.local/nuget/powershell/'
+    $RepositoryProxy
 )
 
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12

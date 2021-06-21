@@ -1,0 +1,24 @@
+ConnectionBrokerFqdn: DC-RDCB-SRV01.MAPCOM.LOCAL
+WebAccessServerFqdn: DC-RDWA-SRV01.MAPCOM.LOCAL
+CollectionName: Operations Dashboard
+CollectionDescription: "This RD Session Collection publishes RemoteApp for launching https://aacc-vip.sip.mapcommunications.com in IE."
+CollectionConfiguration:
+  UserGroup:
+    - MAPCOM\Domain Users
+    - MAPCOM\IT
+  ActiveSessionLimitMin: 0
+  DisconnectedSessionLimitMin: 60
+  IdleSessionLimitMin: 30
+  AuthenticateUsingNLA: true
+  AutomaticReconnectionEnabled: false
+  BrokenConnectionAction: LogOff
+  ClientRedirectionOptions: Clipboard
+  ClientPrinterAsDefault: true
+  ClientPrinterRedirected: false
+  EncryptionLevel: ClientCompatible
+  MaxRedirectedMonitors: 3
+  SecurityLayer: Negotiate
+  TemporaryFoldersDeletedOnExit: true
+  EnableUserProfileDisks: true
+  DiskPath: \\DC-RDUP-SRV01\AACC
+  MaxUserProfileDiskSizeGB: 4

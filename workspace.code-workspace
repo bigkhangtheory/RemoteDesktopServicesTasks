@@ -9,9 +9,9 @@
     "plantuml.exportFormat": "png",
     "plantuml.exportOutDir": "Docs/Diagrams/out",
     "plantuml.render": "Local",
-    "editor.fontFamily": "'CaskaydiaCove NF',Consolas, 'Courier New', monospace",
+    "editor.fontFamily": "'Cascadia Code','Cascadia Mono',Consolas, 'Courier New', monospace",
     "powershell.codeFormatting.autoCorrectAliases": true,
-    "powershell.codeFormatting.preset": "OTBS",
+    "powershell.codeFormatting.preset": "Allman",
     "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
     "powershell.codeFormatting.useCorrectCasing": true,
     "powershell.codeFormatting.useConstantStrings": true,
@@ -21,6 +21,12 @@
     "files.associations": {
       "*.mof": "json"
     },
-    "editor.inlineHints.fontFamily": "'CaskaydiaCove NF',Consolas, 'Courier New', monospace"
+    "editor.inlineHints.fontFamily": "'CaskaydiaCove NF',Consolas, 'Courier New', monospace",
+    "terminal.integrated.copyOnSelection": true,
+    "terminal.integrated.fontFamily": "'TerminessTTF NF'",
+    "editor.fontSize": 13,
+    "editor.codeLensFontFamily": "'TerminessTTF NF'",
+    "editor.codeLensFontSize": 12,
+    "poshProTools.license": "<License><Terms>PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxMaWNlbnNlVGVybXMgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeG1sbnM6eHNkPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSI+CiAgPFN0YXJ0RGF0ZT4yMDIwLTEyLTI3VDAxOjA2OjM5LjU2MDc1NzVaPC9TdGFydERhdGU+CiAgPFVzZXJOYW1lPmJpZ2toYW5ndGhlb3J5QGdtYWlsLmNvbTwvVXNlck5hbWU+CiAgPFByb2R1Y3ROYW1lPlBvd2VyU2hlbGxQcm9Ub29sc19OZXc8L1Byb2R1Y3ROYW1lPgogIDxFbmREYXRlPjIwMjEtMDEtMjdUMDA6MDA6MDA8L0VuZERhdGU+CiAgPFNlYXROdW1iZXI+MTwvU2VhdE51bWJlcj4KICA8SXNUcmlhbD5mYWxzZTwvSXNUcmlhbD4KICA8U3Vic2NyaXB0aW9uSWQ+WllXZkJNcTVUNm1HVFQ3eDROWE10dzwvU3Vic2NyaXB0aW9uSWQ+CjwvTGljZW5zZVRlcm1zPg==</Terms><Signature>ajd+WjU9v+VigZj0Y3CNWrewldKPkkh310QHlFzNrAbSkE3pGbgwSw==</Signature></License>"
   }
 }
