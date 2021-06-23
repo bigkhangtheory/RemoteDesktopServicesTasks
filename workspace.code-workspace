@@ -23,7 +23,7 @@
     },
     "editor.inlineHints.fontFamily": "'CaskaydiaCove NF',Consolas, 'Courier New', monospace",
     "terminal.integrated.copyOnSelection": true,
-    "terminal.integrated.fontFamily": "'TerminessTTF NF'",
+    "terminal.integrated.fontFamily": "'CaskaydiaCove NF' ",
     "editor.fontSize": 13,
     "editor.codeLensFontFamily": "'TerminessTTF NF'",
     "editor.codeLensFontSize": 12,

@@ -1,0 +1,25 @@
+CollectionName: 'HUBA4 - Back Office'
+SessionHost:
+  - CHESHUBA4RDC05
+  - CHESHUBA4RDC09
+  - CHESHUBA4RDC12
+CollectionConfiguration:
+  UserGroup:
+    - MAPCOM\Topaz - HUBA4 - Back Office
+    - MAPCOM\Domain Users
+    - MAPCOM\IT-Admin
+    - MAPCOM\System Administrators (I)
+  DisconnectedSessionLimitMin: 30
+  IdleSessionLimitMin: 180
+  BrokenConnectionAction: Disconnect #attribute to be verified
+  AutomaticReconnectionEnabled: True 
+  ClientRedirectionOptions: Clipboard
+  ClientPrinterAsDefault: true
+  ClientPrinterRedirected: false
+  EncryptionLevel: ClientCompatible
+  MaxRedirectedMonitors: 3
+  SecurityLayer: Negotiate
+  TemporaryFoldersDeletedOnExit: true
+  EnableUserProfileDisks: true  
+  DiskPath: \\mapcom-rds-lb\HUBA4BackOffice
+  MaxUserProfileDiskSizeGB: 4
