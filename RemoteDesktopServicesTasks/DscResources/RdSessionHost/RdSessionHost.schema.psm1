@@ -44,12 +44,6 @@ configuration RdSessionHost
     if ($null -eq $ConnectionBrokerFqdn) { $ConnectionBrokerFqdn = $localhost }
     if ($null -eq $WebAccessServerFqdn) { $WebAccessServerFqdn = $localhost }
 
-    # configuration required Windows Features
-    WindowsFeature desktopExperience
-    {
-        Name   = 'Desktop-Experience'
-        Ensure = 'Present'
-    }
     WindowsFeature remoteDesktopServices
     {
         Name   = 'Remote-Desktop-Services'
@@ -67,7 +61,7 @@ configuration RdSessionHost
         IncludeAllSubFeature = $true
     }
     $dependsOnWindowsFeature = @(
-        '[WindowsFeature]desktopExperience', '[WindowsFeature]remoteDesktopServices', '[WindowsFeature]rdsRDServer', '[WindowsFeature]rsatRDSTools'
+        '[WindowsFeature]remoteDesktopServices', '[WindowsFeature]rdsRDServer', '[WindowsFeature]rsatRDSTools'
     )
 
     # if Connection Broker is not specified, configure this node
