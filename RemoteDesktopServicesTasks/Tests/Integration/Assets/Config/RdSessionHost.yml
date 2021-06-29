@@ -1,5 +1,4 @@
 ConnectionBrokerFqdn: DC-RDCB-SRV01.MAPCOM.LOCAL
-WebAccessServerFqdn: DC-RDWA-SRV01.MAPCOM.LOCAL
 CollectionName: Operations Dashboard
 CollectionDescription: "This RD Session Collection publishes RemoteApp for launching https://aacc-vip.sip.mapcommunications.com in IE."
 CollectionConfiguration:

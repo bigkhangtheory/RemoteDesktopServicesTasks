@@ -42,7 +42,6 @@ configuration RdSessionHost
 
     # if the Connect Broker and Web Access servers are not specified, then assume this node
     if ($null -eq $ConnectionBrokerFqdn) { $ConnectionBrokerFqdn = $localhost }
-    if ($null -eq $WebAccessServerFqdn) { $WebAccessServerFqdn = $localhost }
 
     WindowsFeature remoteDesktopServices
     {
@@ -51,7 +50,7 @@ configuration RdSessionHost
     }
     WindowsFeature rdsRDServer
     {
-        Name   = 'RDS-RD-SERVER'
+        Name   = 'RDS-RD-Server'
         Ensure = 'Present'
     }
     WindowsFeature rsatRDSTools
@@ -60,41 +59,17 @@ configuration RdSessionHost
         Ensure               = 'Present'
         IncludeAllSubFeature = $true
     }
-    $dependsOnWindowsFeature = @(
-        '[WindowsFeature]remoteDesktopServices', '[WindowsFeature]rdsRDServer', '[WindowsFeature]rsatRDSTools'
-    )
-
-    # if Connection Broker is not specified, configure this node
-    if ($localhost -eq $ConnectionBrokerFqdn)
-    {
-        WindowsFeature rdsConnectionBroker
-        {
-            Name   = 'RDS-Connection-Broker'
-            Ensure = 'Present'
-        }
-        $dependsOnWindowsFeature.Add('[WindowsFeature]rdsConnectionBroker')
-    }
-
-    # if Web Access server is not specifed, configure this node
-    if ($localhost -eq $WebAccessServerFqdn)
-    {
-        WindowsFeature rdsWebAccess
-        {
-            Name   = 'RDS-Web-Access'
-            Ensure = 'Present'
-        }
-        $dependsOnWindowsFeature.Add('[WindowsFeature]rdsWebAccess')
-    }
+    $dependsOnWindowsFeature = '[WindowsFeature]rdsRDServer'
 
     # create and configure an RDS deployment with this node
-    xRDSessionDeployment "deployment_$($localhost -replace '[().:\s]', '')"
+    xRDServer "rdserver_$($localhost -replace '[().:\s]', '')"
     {
-        SessionHost      = $localhost
+        Server    = $localhost
         ConnectionBroker = if ($ConnectionBrokerFqdn) { $ConnectionBrokerFqdn } else { $localhost }
-        WebAccessServer  = if ($ConnectionBrokerFqdn) { $WebAccessServerFqdn } else { $localhost }
-        DependsOn        = $dependsOnWindowsFeature
+        Role      = 'RDS-RD-Server'
+        DependsOn = $dependsOnWindowsFeature
     }
-    $dependsOnRDSessionDeployment = "[xRDSessionDeployment]deployment_$($localhost -replace '[().:\s]', '')"
+    $dependsOnRDServerRole = "[xRDServer]rdserver_$($localhost -replace '[().:\s]', '')"
 
 
     # create and configure an RDS Session Collection with this node
@@ -103,8 +78,8 @@ configuration RdSessionHost
         CollectionName        = $CollectionName
         CollectionDescription = $CollectionDescription
         SessionHost           = $localhost
-        ConnectionBroker      = if ($ConnectionBrokerFqdn) { $ConnectionBrokerFqdn } else { $localhost }
-        DependsOn             = $dependsOnRDSessionDeployment
+        ConnectionBroker = if ($ConnectionBrokerFqdn) { $ConnectionBrokerFqdn } else { $localhost }
+        DependsOn             = $dependsOnRDServerRole
     }
     $dependsOnRDSessionCollection = "[xRDSessionCollection]collection_$($localhost -replace '[().:\s]', '')"
 
@@ -124,7 +99,7 @@ configuration RdSessionHost
         xRDSessionCollectionConfiguration "configuration_$($CollectionName -replace '[().:\s]', '')"
         {
             CollectionName                 = $CollectionName
-            ConnectionBroker               = if ($ConnectionBrokerFqdn) { $ConnectionBrokerFqdn } else { $localhost }
+            ConnectionBroker = if ($ConnectionBrokerFqdn) { $ConnectionBrokerFqdn } else { $localhost }
             UserGroup                      = $myGroups
             ActiveSessionLimitMin          = $CollectionConfiguration.ActiveSessionLimitMin
             DisconnectedSessionLimitMin    = $CollectionConfiguration.DisconnectedSessionLimitMin
