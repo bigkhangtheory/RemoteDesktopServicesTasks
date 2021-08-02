@@ -19,10 +19,6 @@ configuration RdSessionHost
 
         [Parameter()]
         [System.String]
-        $WebAccessServerFqdn,
-
-        [Parameter()]
-        [System.String]
         $CollectionName,
 
         [Parameter()]
@@ -38,7 +34,7 @@ configuration RdSessionHost
     Import-DscResource -Module xRemoteDesktopSessionHost
 
     # retrieve hostname of this node
-    $localhost = [System.Net.Dns]::GetHostByName((hostname)).HostName
+    $localhost = $env:ComputerName
 
     # if the Connect Broker and Web Access servers are not specified, then assume this node
     if ($null -eq $ConnectionBrokerFqdn) { $ConnectionBrokerFqdn = $localhost }

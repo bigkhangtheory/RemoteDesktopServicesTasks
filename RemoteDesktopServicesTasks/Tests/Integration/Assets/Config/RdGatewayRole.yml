@@ -1,0 +1,6 @@
+ConnectionBrokerFqdn: DC-RDCB-SRV01.MAPCOM.LOCAL 
+GatewayExternalFqdn: GATEWAY.RDS.MAPCOM.LOCAL
+GatewayMode: Custom
+LogonMethod: Password
+UseCachedCredentials: true
+BypassLocal: false 
