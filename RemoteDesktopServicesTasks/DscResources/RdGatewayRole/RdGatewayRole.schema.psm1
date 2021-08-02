@@ -22,7 +22,15 @@ configuration RdGatewayRole
 
         [Parameter()]
         [System.String]
-        $LogonMethod           
+        $LogonMethod,
+        
+        [Parameter()]
+        [System.Boolean]
+        $UseCachedCredentials,
+
+        [Parameter()]
+        [System.Boolean]
+        $BypassLocal
     )
 
     Import-DscResource -Module PSDesiredStateConfiguration
@@ -34,12 +42,12 @@ configuration RdGatewayRole
     # if the Connect Broker is not specifed, then assume this node
     WindowsFeature AddRdGateway
     {
-        Name = 'RDS-Gateway'
+        Name   = 'RDS-Gateway'
         Ensure = 'Present'
     }
     WindowsFeature AddRsatRdsGateway
     {
-        Name = 'RSAT-RDS-Gateway'
+        Name   = 'RSAT-RDS-Gateway'
         Ensure = 'Present'
     }
 
