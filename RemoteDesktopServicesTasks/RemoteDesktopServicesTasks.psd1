@@ -12,7 +12,7 @@
     # RootModule = ''
 
     # Version number of this module.
-    ModuleVersion        = '0.6.0'
+    ModuleVersion        = '2021.9.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -113,7 +113,7 @@
             # Prerelease = ''
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-            RequireLicenseAcceptance = $false
+            RequireLicenseAcceptance   = $false
 
             # External dependent modules of this module
             ExternalModuleDependencies = 'PSDesiredStateConfiguration'
@@ -129,4 +129,3 @@
     # DefaultCommandPrefix = ''
 
 }
-

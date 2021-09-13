@@ -1,0 +1,5 @@
+Version: 1.0.25.0
+ConnectionBrokerCertificate: \\mapcom.local\DscService\Resources\Certificates\RDS\Broker\broker.rds.mapcom.local.cer
+PublishedAs: Production
+Ensure: Present
+

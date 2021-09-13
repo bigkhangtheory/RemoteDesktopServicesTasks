@@ -1,0 +1,35 @@
+Path: C:\Support\FormCache
+FileName: PIAmtelco.ini
+IniSettings:
+  - Key: DEBUG
+    Value: 'False'
+  - Key: AUTOSWAP
+    Value: 'True'
+  - Key: POLLINTERVAL
+    Value: 1
+  - Key: DIDSTART
+    Value: 1
+  - Key: DIDLENGTH
+    Value: 4
+  - Key: WYGANTDIR
+    Value: \
+  - Key: WYGANT
+    Value: 'False'
+  - Key: RUNFORMTITLE
+    Value: RUNFORM - RUNFORM
+  - Key: DID
+    Value: ''
+  - Key: ANI
+    Value: ''
+  - Key: MISC1
+    Value: ''
+  - Key: MISC2
+    Value: ''
+  - Key: DIALSTRING
+    Value: ''
+  - Key: ACTIVE
+Users:
+  - +bhalim
+  - +knguyen
+  - +bma
+  - -rpelech
