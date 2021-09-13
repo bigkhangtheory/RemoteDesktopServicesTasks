@@ -74,6 +74,9 @@ configuration HUBA4FormCache
             Ensure          = $ensure
         } #end File
         
+        # store configuration dependency
+        $dependsOnDirectory = "[File]$executionName"
+        
         
         # if ensure is Present, create DSC resource for PIAmtelco.ini
         if ($ensure -eq 'Present')
@@ -102,6 +105,9 @@ configuration HUBA4FormCache
                     $i.Ensure = 'Present'
                 }
 
+                # this resource depends on the created directory
+                $i.DependsOn = $dependsOnDirectory
+
                 # create execution name for the resource
                 $executionName = "$($myIni -replace '[-().:\s\\]', '_')_$($i.Key)"
 
@@ -127,11 +133,12 @@ configuration HUBA4FormCache
             
             IniFile "$executionName"
             {
-                Path    = $myIni
-                Key     = 'POLLDIR'
-                Value   = $value
-                Section = ''
-                Ensure  = 'Present'
+                Path      = $myIni
+                Key       = 'POLLDIR'
+                Value     = $value
+                Section   = ''
+                Ensure    = 'Present'
+                DependsOn = $dependsOnDirectory
             }
         } #end if
     } #end foreach
