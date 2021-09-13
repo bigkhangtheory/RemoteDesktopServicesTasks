@@ -1,6 +1,6 @@
-# ActiveDirectoryTasks
+# RemoteDesktopServicesTasks (DSC Composite Resource)
 
-Windows PowerShell Desired State Configuration (DSC) provides a configuration platform that is based on open standards. This repo provides a structured project for building re-usable and composable **DSC Configurations** *(DSC Composite Resources)* used to manage and configure Active Directory Domain Services.
+Windows PowerShell Desired State Configuration (DSC) provides a configuration platform that is based on open standards. This repo provides a structured project for building re-usable and composable **DSC Configurations** *(DSC Composite Resources)* used to manage and configure a Remote Desktop Services deployment.
 
 For information about the scripts that perform work described by Configurations, see the GitHub repo for [DSC Resources](http://github.com/powershell/dscresources).
 
