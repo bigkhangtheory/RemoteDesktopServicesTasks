@@ -1,0 +1,25 @@
+DomainDN: DC=mapcom,DC=local
+Policies:
+  - Name: RDG_CAP_DomainUsers
+    UserGroups:
+      - Domain Users
+    Status: Enabled
+    AuthMethod: Password
+    IdleTimeOut: 1440
+    SessionTimeout: 0
+    SessionTimeoutAction: Disconnect
+
+
+  # ---
+
+  - Name: RDG_CAP_Evaluation
+    UserGroups:
+      - System Administrators (I)
+      - System Administrators (II)
+      - System Administrators (III)
+    Status: Enabled
+    AuthMethod: Password
+    IdleTimeOut: 1440
+    SessionTimeout: 0
+    SessionTimeoutAction: Disconnect
+

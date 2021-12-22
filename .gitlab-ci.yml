@@ -1,7 +1,7 @@
 # =============================================================================
 stages:
   - build
-#  - test 
+#  - test
 #  - staging
 #  - deploy
 
@@ -14,7 +14,7 @@ variables:
   GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_CONCURRENT_ID/$CI_PROJECT_NAME
   CI_ENVIRONMENT: Prod
   NugetFeed: MapPSGallery
-  NugetApiKey: GxLd2ectjnjfyJ0tu9xe
+  NugetApiKey: f387e50da49167741b59c32c4bd4d6342a218d86
   NugetApiUrl: "https://repo.windows.mapcom.local/nuget/powershell/"
 
 cache: &global_cache
@@ -23,6 +23,7 @@ cache: &global_cache
   paths:
     - BuildOutput/Modules
   policy: pull-push
+
 
 # -----------------------------------------------------------------------------
 # STAGE: BUILD

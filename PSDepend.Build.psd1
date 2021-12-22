@@ -12,7 +12,7 @@
     # -------------------------------------------------------------------------
     # PowerShell Modules
     # -------------------------------------------------------------------------
-    
+
     BuildHelpers                 = 'latest'
     # Helper functions for PowerShell CI/CD scenarios
 
@@ -53,19 +53,22 @@
     # Module to simplify PowerShell based deployments
 
     RemoteDesktop                = '0.0.0.2'
-    
+
     # -------------------------------------------------------------------------
     # DSC Resources
     # -------------------------------------------------------------------------
 
-    DSCR_FileContent = '2.4.2'
+    DSCR_FileContent             = '2.4.2'
     # PowerShell DSC Resource to create TXT / INI / JSON file.
-    
+
+    FileContentDsc               = '1.3.0.151'
+    # This module contains the DSC resources for manipulating the content of text files.
+
     PSModulesDsc                 = '1.0.13.0'
     # DSC module to manage Powershell modules and repositories.
 
     xPSDesiredStateConfiguration = '9.1.0'
-    
+
     xRemoteDesktopSessionHost    = '2.0.0'
     # Module with DSC Resources for Remote Desktop Session Host.
 }
