@@ -18,8 +18,7 @@ Policies:
   - Name: RDG_RAP_WsusServers
     Status: Enabled
     Description: Authorized connections to WSUS servers
-    PortNumbers:
-      - 3389
+    Ports: RDP
     ComputerGroupType: DomainManaged # ComputerGrouptype = 1
     ComputerGroup: WSUS Servers
     UserGroups:
@@ -30,9 +29,7 @@ Policies:
   - Name: RDG_RAP_AllDomainComputers
     Status: Enabled
     Description: All domain computers
-    PortNumbers:
-      - 3389
+    Port: RDP
     ComputerGroupType: Any # ComputerGroupType = 2
     UserGroups:
       - Domain Users
-      - System Administrators (I)

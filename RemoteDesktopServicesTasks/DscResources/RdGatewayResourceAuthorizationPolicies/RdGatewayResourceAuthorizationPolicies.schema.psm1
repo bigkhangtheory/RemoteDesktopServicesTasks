@@ -127,6 +127,18 @@ configuration RdGatewayResourceAuthorizationPolicies
                 $params.Description = $p.Description
             }
 
+            # if 'Ports' not specified, set default value, othwerise map the valid value
+            if ($p.ContainsKey('Ports'))
+            {
+                # switch state mapping valid strings to values
+                $params.PortNumbers = switch ($p.Ports)
+                {
+                    'RDP' { '3389' }
+                    'Any' { '*' }
+                    Default { '3389' }
+                }
+            }
+
             # if 'ComputerGroupType' not specified, set default value, othwerise map the valid value
             if ($p.ContainsKey('ComputerGroupType'))
             {
@@ -337,6 +349,7 @@ configuration RdGatewayResourceAuthorizationPolicies
                                 ComputerGroupType = $using:computerGroupType
                                 ComputerGroup     = $using:computerGroup
                                 UserGroups        = $using:userGroups
+                                Force             = $true
                             }
                             New-Item @Splatting
                         }
@@ -355,7 +368,7 @@ configuration RdGatewayResourceAuthorizationPolicies
                             ComputerGroupType = $using:computerGroupType
                             ComputerGroup     = $using:computerGroup
                             UserGroups        = $using:userGroups
-
+                            Force             = $true
                         }
                         New-Item @Splatting
                     } #end if
@@ -373,7 +386,17 @@ configuration RdGatewayResourceAuthorizationPolicies
                     # query for existing RD RAP
                     $rap = Get-Item -Path $path -ErrorAction SilentlyContinue
 
-                    return @{ Result = $rap }
+                    # if the RD CAP does not exist, return 'N/A'
+                    if ($null -eq $rap)
+                    {
+                        $result = 'N/A'
+                    }
+                    else
+                    {
+                        $result = $rap
+                    }
+
+                    return @{ Result = $result }
                 } #end GetScript
 
                 # this resource depends on installation of RD Gateway

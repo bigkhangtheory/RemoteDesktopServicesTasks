@@ -77,11 +77,36 @@ configuration RemoteDesktopConnectionFiles
             # remove case sensitivity for ordered Dictionary or Hashtable
             $c = @{} + $c
 
+
+            # the property 'UserName' must be specified, otherwise fail
+            if (-not $c.ContainsKey('UserName'))
+            {
+                throw 'ERROR: The property UserName is not defined.'
+            }
+
             # format the user name
             $userName = '{0}@{1}' -f $c.UserName, $myDomainName
 
+
+            # the property 'ComputerName' must be specified, otherwise fail
+            if (-not $c.ContainsKey('ComputerName'))
+            {
+                throw 'ERROR: The property ComputerName is not defined.'
+            }
+
             # format the computer name
             $computerName = '{0}.{1}' -f $c.ComputerName, $myDomainName
+
+
+            # stage expiration flag
+            [System.Boolean]$isExpired = $false
+
+            # if the property 'ExpirationDate' is defined, evaluate
+            if ($c.ContainsKey('ExpirationDate'))
+            {
+                $isExpired = [System.DateTime]$c.ExpirationDate -lt (Get-Date)
+            }
+
 
             # if GatewayAddress is specified, enable it's usage
             if ($PSBoundParameters.ContainsKey('GatewayAddress'))
@@ -94,16 +119,21 @@ configuration RemoteDesktopConnectionFiles
             }
 
             # format the file name
-            $fileName = '{0}_{1}.rdp' -f $c.UserName.ToUpper(), $c.ComputerName.ToUpper()
+            $fileName = '{0}_{1}.rdp' -f $c.UserName.ToLower(), $c.ComputerName.ToUpper()
 
             # format the destination path
             $destPath = '{0}\{1}' -f $DestinationPath, $fileName
 
-            # if not specified, ensure 'Present'
-            if (-not $c.ContainsKey('Ensure'))
+
+            # ensure the resource must be 'Present'
+            [System.String]$ensure = 'Present'
+
+            # if the entry is expired, the resource must be 'Absent'
+            if ($isExpired)
             {
-                $ensure = 'Present'
+                $ensure = 'Absent'
             }
+
 
             # RDP file contents
             $contents = @"
@@ -183,11 +213,14 @@ full address:s:$computerName
 
                 xScript $executionName
                 {
-                    TestScript = {
+                    TestScript           = {
                         return $false
                     }
 
-                    SetScript  = {
+                    SetScript            = {
+
+                        # reset and remove all RDP files from the published path
+                        Get-ChildItem -Path $using:PublishPath -Filter '*.rdp' -ErrorAction 'SilentlyContinue' | Remove-Item -Force -ErrorAction 'SilentlyContinue'
 
                         # retrieve all RDP files from the specified location
                         $rdpFiles = Get-ChildItem -Path $using:DestinationPath -ErrorAction 'SilentlyContinue'
@@ -206,13 +239,17 @@ full address:s:$computerName
                             }
                             Copy-Item @Splatting
                         }
+
+
                     }
 
-                    GetScript  = {
+                    GetScript            = {
                         return @{ Result = 'N/A' }
                     }
 
-                    DependsOn  = $dependsOnRdpFile
+                    PsDscRunAsCredential = $PublishCredential
+
+                    DependsOn            = $dependsOnRdpFile
                 } #end xScript
             } #end if
         } #end foreach

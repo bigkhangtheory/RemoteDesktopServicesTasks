@@ -401,6 +401,7 @@ configuration RdGatewayConnectionAuthorizationPolicies
                                 SessionTimeout        = $using:sessionTimeout
                                 SessionTimeoutAction  = $using:sessionTimeoutAction
                                 UserGroups            = $using:userGroups
+                                Force                 = $true
                             }
                             New-Item @Splatting
                         }
@@ -421,6 +422,7 @@ configuration RdGatewayConnectionAuthorizationPolicies
                             SessionTimeout        = $using:sessionTimeout
                             SessionTimeoutAction  = $using:sessionTimeoutAction
                             UserGroups            = $using:userGroups
+                            Force                 = $true
                         }
                         New-Item @Splatting
                     } #end if
@@ -438,7 +440,18 @@ configuration RdGatewayConnectionAuthorizationPolicies
                     # query for existing RD CAP
                     $cap = Get-Item -Path $path -ErrorAction SilentlyContinue
 
-                    return @{ Result = $cap }
+                    # if the RD CAP does not exist, return 'N/A'
+                    if ($null -eq $cap)
+                    {
+                        $result = 'N/A'
+                    }
+                    else
+                    {
+                        $result = $cap
+                    }
+
+                    return @{ Result = $result }
+
                 } #end GetScript
 
                 # this script resource depends on installation of RD Gateway
