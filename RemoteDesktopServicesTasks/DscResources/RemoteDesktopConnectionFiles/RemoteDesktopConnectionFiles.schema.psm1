@@ -213,11 +213,11 @@ full address:s:$computerName
 
                 xScript $executionName
                 {
-                    TestScript           = {
+                    TestScript = {
                         return $false
                     }
 
-                    SetScript            = {
+                    SetScript  = {
 
                         # reset and remove all RDP files from the published path
                         Get-ChildItem -Path $using:PublishPath -Filter '*.rdp' -ErrorAction 'SilentlyContinue' | Remove-Item -Force -ErrorAction 'SilentlyContinue'
@@ -243,13 +243,11 @@ full address:s:$computerName
 
                     }
 
-                    GetScript            = {
+                    GetScript  = {
                         return @{ Result = 'N/A' }
                     }
 
-                    PsDscRunAsCredential = $PublishCredential
-
-                    DependsOn            = $dependsOnRdpFile
+                    DependsOn  = $dependsOnRdpFile
                 } #end xScript
             } #end if
         } #end foreach
