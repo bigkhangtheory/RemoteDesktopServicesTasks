@@ -127,7 +127,7 @@ configuration RdGatewayManagedComputerGroups
             #>
 
             # create execution name for the resource
-            $executionName = "RD_GatewayManagedComputerGroups_$("$($name)_$($computers)" -replace '[-().:\s]', '_')"
+            $executionName = "RD_GatewayManagedComputerGroups_$("$($g.Name)_$($g.Computers)" -replace '[-().:\s]', '_')"
 
 
             $output = @"
