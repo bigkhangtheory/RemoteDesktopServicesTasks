@@ -70,7 +70,7 @@ configuration RemoteDesktopConnectionFiles
     if ($PSBoundParameters.ContainsKey('Connections'))
     {
         # stage variable to hold resource dependencies
-        $dependsOnRdpFile = @()
+        $dependsOnRdpFile = New-Object -TypeName System.Collections.ArrayList
 
         foreach ($c in $Connections)
         {
@@ -145,7 +145,7 @@ gatewayhostname:s:$GatewayAddress
 gatewayusagemethod:i:1
 gatewaycredentialssource:i:4
 gatewayprofileusagemethod:i:$useGatewayServer
-promptcredentialonce:i:0
+promptcredentialonce:i:1
 gatewaybrokeringtype:i:0
 use redirection server name:i:0
 rdgiskdcproxy:i:0
@@ -171,49 +171,50 @@ full address:s:$computerName
             }
 
             # add resource dependency
-            $dependsOnRdpFile += "[File]$executionName"
-        } #end foreach
+            $dependsOnRdpFile = "[File]$executionName"
 
-
-        <#
-            If the PublishPath and Credential is specified, create Script resource to move the files over
-        #>
-        if ( ($PSBoundParameters.ContainsKey('PublishPath')) -and ($PSBoundParameters.ContainsKey('PublishCredential')) )
-        {
-            # create execution name for the resource
-            $executionName = "Publish_RDP_File_$("$($PublishPath)" -replace '[-().:\\\s]', '_')"
-
-            xScript $executionName
+            <#
+                If the PublishPath and Credential is specified, create Script resource to move the files over
+            #>
+            if ( ($PSBoundParameters.ContainsKey('PublishPath')) -and ($PSBoundParameters.ContainsKey('PublishCredential')) )
             {
-                TestScript = {
-                    return $false
-                }
+                # create execution name for the resource
+                $executionName = "Publish_$("$($executionName)" -replace '[-().:\s]', '_')"
 
-                SetScript  = {
-
-                    # retrieve all RDP files from the specified location
-                    $rdpFiles = Get-ChildItem -Path $using:DestinationPath -Filter '*.rdp'
-
-                    # enumerate all RDP files and copy them to PublishingLocation
-                    foreach ($r in $rdpFiles)
-                    {
-                        # splat Copy-Item parameters
-                        $Splatting = @{
-                            Path        = $r.FullName
-                            Destination = $using:PublishPath
-                            Force       = $true
-                            PassThru    = $true
-                            Credential  = $using:PublishCredential
-                            ErrorAction = 'SilentlyContinue'
-                        }
-                        Copy-Item @Splatting
+                xScript $executionName
+                {
+                    TestScript = {
+                        return $false
                     }
-                }
 
-                GetScript  = {
-                    return @{ Result = 'N/A' }
-                }
-            }
-        }
+                    SetScript  = {
+
+                        # retrieve all RDP files from the specified location
+                        $rdpFiles = Get-ChildItem -Path $using:DestinationPath -ErrorAction 'SilentlyContinue'
+
+                        # enumerate all RDP files and copy them to PublishingLocation
+                        foreach ($r in $rdpFiles)
+                        {
+                            # splat Copy-Item parameters
+                            $Splatting = @{
+                                Path        = $r.FullName
+                                Destination = $using:PublishPath
+                                Force       = $true
+                                PassThru    = $true
+                                Credential  = $using:PublishCredential
+                                ErrorAction = 'SilentlyContinue'
+                            }
+                            Copy-Item @Splatting
+                        }
+                    }
+
+                    GetScript  = {
+                        return @{ Result = 'N/A' }
+                    }
+
+                    DependsOn  = $dependsOnRdpFile
+                } #end xScript
+            } #end if
+        } #end foreach
     }
 } #end configuration

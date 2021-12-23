@@ -241,7 +241,6 @@ configuration RdGatewayConnectionAuthorizationPolicies
                     # set verbose output during testing
                     Write-Verbose "Test RD CAP '$using:name' -> expect Status: '$using:status', EvaluationOrder: '$using:evaluationOrder', AuthMethod: '$using:authMethod', IdleTimeout: '$using:idleTimeout', SessionTimeout: '$using:sessionTimeout', SessionTimeoutAction: '$using:sessionTimeoutAction', UserGroups: '$using:UserGroups'"
 
-
                     # format the RD CAP path
                     $path = 'RDS:\GatewayServer\CAP\{0}' -f $using:name
 
@@ -339,7 +338,72 @@ configuration RdGatewayConnectionAuthorizationPolicies
 
                     if ($null -ne $cap)
                     {
+                        # query all current values
+                        $capStatus = Get-Item -Path "$path\Status"
+                        $capEvaluationOrder = Get-Item -Path "$path\EvaluationOrder"
+                        $capAuthMethod = Get-Item -Path "$path\AuthMethod"
+                        $capAllowOnlySDRTSServers = Get-Item -Path "$path\AllowOnlySDRTSServers"
+                        $capIdleTimeout = Get-Item -Path "$path\IdleTimeout"
+                        $capSessionTimeout = Get-Item -Path "$path\SessionTimeout"
+                        $capSessionTimeoutAction = Get-Item -Path "$path\SessionTimeoutAction"
+                        $capUserGroups = Get-Item -Path "$path\UserGroups" | Get-ChildItem | % Name
 
+                        # evaluate each state of the RD CAP object
+                        if (-not ($using:status -eq $capStatus) )
+                        {
+                            $capStatus | Set-Item -Value $using:status
+                        }
+
+                        if (-not ($using:evaluationOrder -eq $capEvaluationOrder) )
+                        {
+                            $capEvaluationOrder | Set-Item -Value $using:evaluationOrder
+                        }
+
+                        if (-not ($using:authMethod -eq $capAuthMethod) )
+                        {
+                            $capAuthMethod | Set-Item -Value $using:authMethod
+                        }
+
+                        if (-not ($using:allowOnlySDRTSServers -eq $capAllowOnlySDRTSServers) )
+                        {
+                            $capAllowOnlySDRTSServers | Set-Item -Value $using:allowOnlySDRTSServers
+                        }
+
+                        if (-not ($using:idleTimeout -eq $capIdleTimeout) )
+                        {
+                            $capIdleTimeout | Set-Item -Value $using:idleTimeout
+                        }
+
+                        if (-not ($using:sessionTimeout -eq $capSessionTimeout) )
+                        {
+                            $capSessionTimeout | Set-Item -Value $using:sessionTimeout
+                        }
+
+                        if (-not ($using:sessionTimeoutAction -eq $capSessionTimeoutAction) )
+                        {
+                            $capSessionTimeoutAction | Set-Item -Value $using:sessionTimeoutAction
+                        }
+
+                        if ( $null -ne (Compare-Object -ReferenceObject $using:userGroups -DifferenceObject $capUserGroups ) )
+                        {
+                            # if the UserGroups do not match, destroy the existing item and re-create
+                            $cap | Remove-Item -Recurse -Force -ErrorAction 'SilentlyContinue'
+
+                            # splat parameters in hashtable
+                            $Splatting = @{
+                                Path                  = $parentPath
+                                Name                  = $using:name
+                                Status                = $using:status
+                                EvaluationOrder       = $using:evaluationOrder
+                                AuthMethod            = $using:authMethod
+                                AllowOnlySDRTSServers = $using:allowOnlySDRTSServers
+                                IdleTimeout           = $using:idleTimeout
+                                SessionTimeout        = $using:sessionTimeout
+                                SessionTimeoutAction  = $using:sessionTimeoutAction
+                                UserGroups            = $using:userGroups
+                            }
+                            New-Item @Splatting
+                        }
                     }
                     else
                     {
@@ -347,7 +411,7 @@ configuration RdGatewayConnectionAuthorizationPolicies
 
                         # splat parameters in hashtable
                         $Splatting = @{
-                            Path                  = $path
+                            Path                  = $parentPath
                             Name                  = $using:name
                             Status                = $using:status
                             EvaluationOrder       = $using:evaluationOrder
@@ -358,15 +422,31 @@ configuration RdGatewayConnectionAuthorizationPolicies
                             SessionTimeoutAction  = $using:sessionTimeoutAction
                             UserGroups            = $using:userGroups
                         }
-                        (New-Item @Splatting)
+                        New-Item @Splatting
                     } #end if
                 } #end SetScript
 
                 GetScript  = {
-                    return @{ Result = 'N/A' }
+
+                    # import the RemoteDesktopServices PS Module
+                    Import-Module -Name RemoteDesktopServices -ErrorAction SilentlyContinue
+
+                    $parentPath = 'RDS:\GatewayServer\CAP'
+                    # format the RD CAP path
+                    $path = '{0}\{1}' -f $parentPath, $using:name
+
+                    # query for existing RD CAP
+                    $cap = Get-Item -Path $path -ErrorAction SilentlyContinue
+
+                    return @{ Result = $cap }
                 } #end GetScript
 
+                # this script resource depends on installation of RD Gateway
+                DependsOn  = $dependsOnAddRsatRdsGateway
             } #end xScript
+
+            # increment the index
+            $index++
         } #end foreach
     } #end if
 } #end configuration

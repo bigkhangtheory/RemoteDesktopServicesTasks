@@ -1,20 +1,4 @@
-DomainDN: example.com
-GatewayManagedComputerGroups:
-
-  - Name: RDG_Group_DNSRoundRobin
-    Description: Add DNS RR to the group
-    Computers:
-      - BROKER.RDS.MAPCOM.LOCAL
-
-  # ---
-
-  - Name: RDG_Group_RDCBComputers
-    Description: All RDCB Computers in the deployment
-    Computers:
-      - DC1-RDCB-SRV01.MAPCOM.LOCAL
-      - DC2-RDCB-SRV01.MAPCOM.LOCAL
-
-
+DomainDN: DC=example,DC=com
 # ResourceAuthorizationPolicies
 #
 # A Remote Desktop resource authorization policy (RD RAP) allows users to connect to remote computers on the network by using RD Gateway.
@@ -38,7 +22,7 @@ Policies:
       - 3389
     ComputerGroupType: DomainManaged # ComputerGrouptype = 1
     ComputerGroup: WSUS Servers
-    UserGroupps:
+    UserGroups:
       - System Administrators (IV)
 
   # ---
